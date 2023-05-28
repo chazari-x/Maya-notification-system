@@ -3,10 +3,10 @@ package server
 import (
 	"net/http"
 
-	"Maya-notification-system/rabbitmq/internal/app/config"
-	"Maya-notification-system/rabbitmq/internal/app/handler"
-	"Maya-notification-system/rabbitmq/internal/app/rabbitmq"
 	"github.com/go-chi/chi/v5"
+	"rabbitmq/internal/app/config"
+	"rabbitmq/internal/app/handler"
+	"rabbitmq/internal/app/rabbitmq"
 )
 
 func StartServer() error {

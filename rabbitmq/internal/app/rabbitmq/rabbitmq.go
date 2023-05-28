@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"Maya-notification-system/rabbitmq/internal/app/model"
 	"github.com/rabbitmq/amqp091-go"
+	"rabbitmq/internal/app/model"
 )
 
 var (
@@ -43,9 +43,18 @@ func (r *RabbitMq) SendMessage(msg model.MsgStruct) error {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
+		q, err := ch.QueueDeclare(
+			"maya", // name
+			false,  // durable
+			false,  // delete when unused
+			false,  // exclusive
+			false,  // no-wait
+			nil,    // arguments
+		)
+
 		if err = ch.PublishWithContext(ctx,
 			"",
-			"maya",
+			q.Name,
 			false,
 			false,
 			amqp091.Publishing{

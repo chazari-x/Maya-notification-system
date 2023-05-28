@@ -37,6 +37,15 @@ func (r *RabbitMq) GetMessage(msgType string) (amqp091.Delivery, error) {
 		_ = ch.Close()
 	}()
 
+	_, err = ch.QueueDeclare(
+		"maya", // name
+		false,  // durable
+		false,  // delete when unused
+		false,  // exclusive
+		false,  // no-wait
+		nil,    // arguments
+	)
+
 	get, b, err := ch.Get(msgType, true)
 	if err != nil {
 		return amqp091.Delivery{}, err

@@ -3,10 +3,11 @@ package telegram
 import (
 	"fmt"
 	"strconv"
+	"time"
 
-	"Maya-notification-system/worker/internal/app/config"
 	"github.com/rabbitmq/amqp091-go"
 	tgbotapi "gopkg.in/telegram-bot-api.v4"
+	"worker/internal/app/config"
 )
 
 type Bot struct {
@@ -29,7 +30,7 @@ func (b *Bot) SendMessage(msg amqp091.Delivery) error {
 		return err
 	}
 
-	text := fmt.Sprintf("Уведомление от %s:\n%s", msg.Timestamp, msg.Body)
+	text := fmt.Sprintf("Уведомление от %s:\n%s", msg.Timestamp.Format(time.RFC822), msg.Body)
 	message := tgbotapi.NewMessage(int64(id), text)
 	if _, err = b.bot.Send(message); err != nil {
 		return err

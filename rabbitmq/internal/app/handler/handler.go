@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"Maya-notification-system/rabbitmq/internal/app/config"
-	"Maya-notification-system/rabbitmq/internal/app/model"
-	"Maya-notification-system/rabbitmq/internal/app/rabbitmq"
+	"rabbitmq/internal/app/config"
+	"rabbitmq/internal/app/model"
+	"rabbitmq/internal/app/rabbitmq"
 )
 
 type Controller struct {

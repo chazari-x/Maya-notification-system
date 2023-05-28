@@ -5,9 +5,9 @@ import (
 	"log"
 	"strings"
 
-	"Maya-notification-system/worker/internal/app/config"
-	"Maya-notification-system/worker/internal/app/rabbitmq"
-	"Maya-notification-system/worker/internal/app/telegram"
+	"worker/internal/app/config"
+	"worker/internal/app/rabbitmq"
+	"worker/internal/app/telegram"
 )
 
 type Controller struct {

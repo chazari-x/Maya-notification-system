@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"Maya-notification-system/worker/internal/app/worker"
+	"worker/internal/app/worker"
 )
 
 func main() {
