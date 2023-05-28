@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -12,12 +13,12 @@ import (
 )
 
 type Controller struct {
-	c      config.Config
-	rabbit rabbitmq.RabbitMq
+	c config.Config
+	r rabbitmq.RabbitMq
 }
 
-func NewController(c config.Config, rabbit rabbitmq.RabbitMq) *Controller {
-	return &Controller{c: c, rabbit: rabbit}
+func NewController(c config.Config, r rabbitmq.RabbitMq) *Controller {
+	return &Controller{c: c, r: r}
 }
 
 func (c *Controller) Post(w http.ResponseWriter, r *http.Request) {
@@ -39,12 +40,19 @@ func (c *Controller) Post(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(b, &msg)
 	if err != nil {
 		log.Print("Post: json unmarshal err: ", err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = c.rabbit.SendMessage(msg)
+	err = c.r.SendMessage(msg)
 	if err != nil {
+		if errors.Is(err, rabbitmq.ErrMethodNotAllowed) {
+			log.Printf("Post: %s, msgType: %s, msg: %s",
+				err.Error(), msg.MsgType, msg.Msg)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
 		log.Printf("Post: %s, msgType: %s, msg: %s",
 			err.Error(), msg.MsgType, msg.Msg)
 		w.WriteHeader(http.StatusInternalServerError)
