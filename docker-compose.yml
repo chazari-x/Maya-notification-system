@@ -11,7 +11,7 @@ services:
     depends_on:
       - base_rabbitmq
     image: service_rabbitmq
-    restart: unless-stopped
+    restart: always
     build: rabbitmq/
     ports:
       - "8080:8080"

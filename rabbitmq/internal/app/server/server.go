@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -29,5 +30,6 @@ func StartServer() error {
 	r := chi.NewRouter()
 	r.Post("/api/send", c.Post)
 
+	log.Print("starting server ", conf.RunAddress)
 	return http.ListenAndServe(conf.RunAddress, r)
 }
