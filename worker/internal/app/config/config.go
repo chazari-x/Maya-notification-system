@@ -18,7 +18,7 @@ type Config struct {
 	} `yaml:"bot"`
 }
 
-const configFile = "internal/app/config/dev.yaml"
+const configFile = "internal/app/config/example.yaml"
 
 func GetConfig() (*Config, error) {
 	yamlFile, err := os.ReadFile(configFile)

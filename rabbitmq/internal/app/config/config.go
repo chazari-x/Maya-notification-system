@@ -14,7 +14,7 @@ type Config struct {
 	RabbitMQ   string `yaml:"rabbitMQ"`
 }
 
-const configFile = "internal/app/config/dev.yaml"
+const configFile = "internal/app/config/example.yaml"
 
 func GetConfig() (Config, error) {
 	yamlFile, err := os.ReadFile(configFile)
