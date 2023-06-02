@@ -48,7 +48,7 @@ func StartWorker() error {
 }
 
 func (c *Controller) worker() {
-	log.Print("starting goroutine")
+	log.Print("starting worker")
 
 	for {
 		get, err := c.r.GetMessage("maya")
