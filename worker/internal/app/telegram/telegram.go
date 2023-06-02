@@ -18,7 +18,7 @@ type Bot struct {
 func NewBot(config *config.Config) (*Bot, error) {
 	bot, err := tgbotapi.NewBotAPI(config.Bot.Token)
 	if err != nil {
-		return nil, fmt.Errorf("new bot api err: %s", err.Error())
+		return nil, fmt.Errorf("new bot api (%s) err: %s", config.Bot.Token, err.Error())
 	}
 
 	return &Bot{bot: bot, conf: config}, nil

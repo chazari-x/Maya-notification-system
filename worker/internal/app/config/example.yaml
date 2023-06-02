@@ -1,4 +1,4 @@
-rabbitMQ: "amqp://guest:guest@maya-notification-system-base_rabbitmq-1/"
+rabbitMQ: amqp://guest:guest@maya-notification-system-base_rabbitmq-1/
 bot:
-  token: "token"
-  url: "https://api.telegram.org/"
+  token: token
+  url: https://api.telegram.org/

@@ -30,6 +30,6 @@ func StartServer() error {
 	r := chi.NewRouter()
 	r.Post("/api/send", c.Post)
 
-	log.Print("starting server ", conf.RunAddress)
+	log.Printf("starting server: %s", conf.RunAddress)
 	return http.ListenAndServe(conf.RunAddress, r)
 }

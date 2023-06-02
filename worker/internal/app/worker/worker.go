@@ -48,6 +48,8 @@ func StartWorker() error {
 		log.Print(err)
 	}
 
+	log.Print("service stopped")
+
 	return nil
 }
 
