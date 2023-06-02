@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -72,7 +71,7 @@ func (c *Controller) worker(ch chan<- error) {
 			}
 
 			if get.Type != "" {
-				fmt.Printf("[%s] Уведомление для %s от %s: %s\n",
+				log.Printf("[%s] Уведомление для %s от %s: %s\n",
 					strings.ToUpper(get.Type),
 					get.ReplyTo,
 					get.Timestamp.Format(time.RFC822),
