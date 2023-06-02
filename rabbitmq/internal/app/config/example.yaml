@@ -1,2 +1,2 @@
-runAddress: "0.0.0.0:8080"
+runAddress: "localhost:8080"
 rabbitMQ: "amqp://guest:guest@maya-notification-system-base_rabbitmq-1/"

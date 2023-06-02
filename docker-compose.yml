@@ -20,5 +20,5 @@ services:
     depends_on:
       - base_rabbitmq
     image: service_worker
-    restart: unless-stopped
+    restart: always
     build: worker/

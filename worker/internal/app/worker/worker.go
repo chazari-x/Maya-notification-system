@@ -40,39 +40,55 @@ func StartWorker() error {
 		b: bot,
 	}
 
-	for true {
-		c.worker()
+	var ch chan error
+
+	c.worker(ch)
+
+	for err = range ch {
+		log.Print(err)
 	}
 
 	return nil
 }
 
-func (c *Controller) worker() {
-	log.Print("starting goroutine")
+func (c *Controller) worker(ch chan<- error) {
+	go func() {
+		log.Print("starting goroutine")
 
-	for {
-		get, err := c.r.GetMessage("maya")
-		if err != nil {
-			continue
-		}
+		defer func() {
+			c.worker(ch)
+		}()
 
-		switch strings.ToLower(get.Type) {
-		case "test":
-			t := strings.Repeat("=", 55-len(get.Type)) +
-				" [" + strings.ToUpper(get.Type) +
-				"] " + strings.Repeat("=", 55-len(get.Type))
+		for {
+			get, err := c.r.GetMessage("maya")
+			if err != nil {
+				go func() {
+					ch <- err
+				}()
+				continue
+			}
 
-			fmt.Println(t)
-			fmt.Printf("Сообщение для пользователя: %s\n", get.ReplyTo)
-			fmt.Printf("От %s\n", get.Timestamp)
-			fmt.Println(string(get.Body))
-			fmt.Println(strings.Repeat("=", len(t)))
-		case "telegram":
-			if err := c.b.SendMessage(get); err != nil {
-				if err := c.r.ReturnMessage(get); err != nil {
-					continue
+			switch strings.ToLower(get.Type) {
+			case "test":
+				t := strings.Repeat("=", 55-len(get.Type)) +
+					" [" + strings.ToUpper(get.Type) +
+					"] " + strings.Repeat("=", 55-len(get.Type))
+
+				fmt.Println(t)
+				fmt.Printf("Сообщение для пользователя: %s\n", get.ReplyTo)
+				fmt.Printf("От %s\n", get.Timestamp)
+				fmt.Println(string(get.Body))
+				fmt.Println(strings.Repeat("=", len(t)))
+			case "telegram":
+				if err := c.b.SendMessage(get); err != nil {
+					if err := c.r.ReturnMessage(get); err != nil {
+						go func() {
+							ch <- err
+						}()
+						continue
+					}
 				}
 			}
 		}
-	}
+	}()
 }
