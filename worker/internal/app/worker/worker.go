@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"worker/internal/app/config"
 	"worker/internal/app/rabbitmq"
@@ -70,17 +71,15 @@ func (c *Controller) worker(ch chan<- error) {
 				continue
 			}
 
-			switch strings.ToLower(get.Type) {
-			case "test":
-				t := strings.Repeat("=", 55-len(get.Type)) +
-					" [" + strings.ToUpper(get.Type) +
-					"] " + strings.Repeat("=", 55-len(get.Type))
+			if get.Type != "" {
+				fmt.Printf("[%s] Уведомление для %s от %s: %s\n",
+					strings.ToUpper(get.Type),
+					get.ReplyTo,
+					get.Timestamp.Format(time.RFC822),
+					get.Body)
+			}
 
-				fmt.Println(t)
-				fmt.Printf("Сообщение для пользователя: %s\n", get.ReplyTo)
-				fmt.Printf("От %s\n", get.Timestamp)
-				fmt.Println(string(get.Body))
-				fmt.Println(strings.Repeat("=", len(t)))
+			switch strings.ToLower(get.Type) {
 			case "telegram":
 				if err := c.b.SendMessage(get); err != nil {
 					if err := c.r.ReturnMessage(get); err != nil {
