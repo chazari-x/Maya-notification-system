@@ -89,7 +89,9 @@ func (c *Controller) mainWorker() {
 		}()
 
 		for {
-			workerOne.work = false
+			if workerOne.work {
+				workerOne.work = false
+			}
 
 			get, err := c.r.GetMessage("maya")
 			if err != nil {
@@ -101,7 +103,9 @@ func (c *Controller) mainWorker() {
 				continue
 			}
 
-			workerOne.work = true
+			if !workerOne.work {
+				workerOne.work = true
+			}
 
 			if get.Type != "" {
 				log.Printf("[%s] Уведомление для %s от %s: %s\n",
@@ -129,6 +133,11 @@ func (c *Controller) worker(wg *sync.WaitGroup, w *workerStruct) {
 	go func() {
 		log.Printf("starting %s", w.nameNewWorker)
 
+		defer func() {
+			w.work = false
+			wg.Done()
+		}()
+
 		for {
 			if w.nameNewWorker == workerOne.nameNewWorker {
 				w.work = false
@@ -136,7 +145,6 @@ func (c *Controller) worker(wg *sync.WaitGroup, w *workerStruct) {
 
 			if !w.work {
 				log.Printf("%s is closed", w.nameNewWorker)
-				wg.Done()
 				break
 			}
 
